@@ -35,7 +35,7 @@ app.use("/api/messages", messageRoutes);
     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
   });
 }*/
-if (process.env.NODE_ENV === "production") {
+/*if (process.env.NODE_ENV === "production") {
   const frontendPath = path.join(__dirname, "frontend", "dist");
 
   app.use(express.static(frontendPath));
@@ -44,7 +44,25 @@ if (process.env.NODE_ENV === "production") {
   app.get("/*path", (req, res) => {
     res.sendFile(path.join(frontendPath, "index.html"));
   });
+}*/
+
+if (process.env.NODE_ENV === "production") {
+  const frontendPath = path.join(__dirname, "frontend", "dist");
+
+  // Serve static files
+  app.use(express.static(frontendPath));
+
+  // Fix for the root path and all other routes
+  app.get("/", (req, res) => {
+    res.sendFile(path.join(frontendPath, "index.html"));
+  });
+
+  // Catch-all route for all other routes
+  app.get("/*", (req, res) => {
+    res.sendFile(path.join(frontendPath, "index.html"));
+  });
 }
+
 
 
 server.listen(PORT, () => {
